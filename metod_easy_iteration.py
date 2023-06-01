@@ -16,22 +16,22 @@ def f_test(x: float,y: float)-> float:
     
 
 # задаем граничные условия
-def mu1_main(y: float)-> float:
+def mu1_main(y: float,a)-> float:
     return (y-2)*(y-3)
-def mu2_main(y: float)-> float:
+def mu2_main(y: float,b)-> float:
     return y*(y-2)*(y-3)
-def mu3_main(x: float)-> float: 
+def mu3_main(x: float,c)-> float: 
     return (x-1)*(x-2)
-def mu4_main(x: float)-> float: 
+def mu4_main(x: float,d)-> float: 
     return x*(x-1)*(x-2)
 
-def mu1_test(y: float, a=1)-> float:
+def mu1_test(y: float, a)-> float:
     return u(a,y)
-def mu2_test(y: float, b=2)-> float:
+def mu2_test(y: float, b)-> float:
     return u(b,y)
-def mu3_test(x: float, c=2)-> float:
+def mu3_test(x: float, c)-> float:
     return u(x,c)
-def mu4_test(x: float, d=3)-> float:
+def mu4_test(x: float, d)-> float:
     return u(x,d)
 
 #метод чебышева
@@ -84,18 +84,18 @@ def Chebishev_metod(h2,k2,n,m,k_num,A,v,f,eps,N_max,counter_iterations, counter_
     norm_r = np.sqrt(norm_r)
     norm_z = np.sqrt(norm_z)
     #exact = np.array([np.array([u(x[i], y[j]) for j in range(m + 1)]) for i in range(n + 1)])  # u(x, y)
-    file.write('Metod Chebisheva\n')
-    for i in range(n+1):
-        file.write('V')
-        file.write(str(i)+'   ')
-        for j in range(m+1):
-            file.write(str(round(v[i][j],14)))
-            if len(str(round(v[i][j],14))):
-                help=18-len(str(round(v[i][j],14)))
-                file.write(' '*help)
-            file.write(' ')
-        file.write('\n')
-    return(v)
+   # file.write('Metod Chebisheva\n')
+    #for i in range(n+1):
+    #    file.write('V')
+     #   file.write(str(i)+'   ')
+      #  for j in range(m+1):
+       #     file.write(str(round(v[i][j],14)))
+        #    if len(str(round(v[i][j],14))):
+         #       help=18-len(str(round(v[i][j],14)))
+          #      file.write(' '*help)
+           # file.write(' ')
+        #file.write('\n')
+    return(v, counter_iterations, eps_max, norm_r, norm_z)
 
 #Метод простых итераций
 def Simple_metod(h2,k2,n,m,k_num,A,v,f,eps,N_max,counter_iterations, x,y):
@@ -138,32 +138,32 @@ def Simple_metod(h2,k2,n,m,k_num,A,v,f,eps,N_max,counter_iterations, x,y):
     norm_r = np.sqrt(norm_r)
     norm_z = np.sqrt(norm_z)
    # exact = np.array([np.array([u(x[i], y[j]) for j in range(m + 1)]) for i in range(n + 1)])  # u(x, y)
-    file.write('Metod Simple iteration\n')
-    for i in range(n+1):
-        file.write('V')
-        file.write(str(i)+'   ')
-        for j in range(m+1):
-            file.write(str(round(v[i][j],14)))
-            if len(str(round(v[i][j],14))):
-                help=18-len(str(round(v[i][j],14)))
-                file.write(' '*help)
-            file.write(' ')
-        file.write('\n')
-    return(v)
+    #file.write('Metod Simple iteration\n')
+    #for i in range(n+1):
+     #   file.write('V')
+      #  file.write(str(i)+'   ')
+       # for j in range(m+1):
+        #    file.write(str(round(v[i][j],14)))
+         #   if len(str(round(v[i][j],14))):
+          #      help=18-len(str(round(v[i][j],14)))
+           #     file.write(' '*help)
+            #file.write(' ')
+        #file.write('\n')
+    return(v,counter_iterations, eps_max, norm_r, norm_z)
 
 
-def start_all_metod(n, m, N_max, eps, a, b, c, d,  k_num=4):
+def start_all_metod(n, m, N_max, eps, a, b, c, d, Var, F,mu1,mu2,mu3,mu4, k_num):
     
-    file = open('D:\\3_kurs\\test-1.txt','w')
+    #file = open('D:\\3_kurs\\test-1.txt','w')
     h = (b - a) / (n)  
     k = (d - c) / (m)  
     x = np.linspace(a, b, n + 1)  
     y = np.linspace(c, d, m + 1)  
-    f = np.array([np.array([-f_main(x[i], y[j]) for j in range(m + 1)]) for i in range(n + 1)])  # f(x, y)
-    mu_1 = np.array([mu1_main(i) for i in y])  
-    mu_2 = np.array([mu2_main(i) for i in y])  
-    mu_3 = np.array([mu3_main(i) for i in x])  
-    mu_4 = np.array([mu4_main(i) for i in x])  
+    f = np.array([np.array([-F(x[i], y[j]) for j in range(m + 1)]) for i in range(n + 1)])  # f(x, y)
+    mu_1 = np.array([mu1(i,a) for i in y])  
+    mu_2 = np.array([mu2(i,b) for i in y])  
+    mu_3 = np.array([mu3(i,c) for i in x])  
+    mu_4 = np.array([mu4(i,d) for i in x])  
     
     v = np.zeros((n + 1, m + 1))  
     
@@ -177,22 +177,24 @@ def start_all_metod(n, m, N_max, eps, a, b, c, d,  k_num=4):
     v[n, :] = mu_2  
     v[:, 0] = mu_3  
     v[:, m] = mu_4  
-    print(v)
+    #print(v)
     # linear interpolation by x
     for j in range(1, m):
         v[1:n, j] = mu_1[j] + (mu_2[j] - mu_1[j]) / (b - a) * (x[1:n] - a)
-    print(v)
-    
-    #start Метод Чебышева
-    v_Cheb=Chebishev_metod(h2,k2,n,m,k_num,A,v,f,eps,N_max,counter_iterations, counter_steps,x,y)
-    print('V Чебышева =',v_Cheb)
-
-    #start Метод простых итераций
-    v_simple=Simple_metod(h2,k2,n,m,k_num,A,v,f,eps,N_max, counter_iterations,x,y)
-    print('V простых итераций =', v_simple)
-
-
-start_all_metod(10,10,1000,10**(-6),1,2,2,3)
+    #print(v)
+    if Var==1:
+        v_method,counter_iterations, eps_max, norm_r, norm_z=Chebishev_metod(h2,k2,n,m,k_num,A,v,f,eps,N_max,counter_iterations, counter_steps,x,y)
+    elif Var==2:
+        v_method,counter_iterations, eps_max, norm_r, norm_z=Simple_metod(h2,k2,n,m,k_num,A,v,f,eps,N_max, counter_iterations,x,y)
+    #print('V Чебышева =',v_Cheb)
+    v=[[0 for i in range (n+1)] for j in range(m+1)]
+    for i in range(m+1):
+        for j in range(n+1):
+            v[i][j]=round(v_method[j][i],5)
+    #print('v = ', v)
+    return v,x,y,counter_iterations, eps_max, norm_r, norm_z
+    #print('V простых итераций =', v_simple)
+#start_all_metod(3,5,1000,10**(-6),1,2,2,3)
 
 
 
