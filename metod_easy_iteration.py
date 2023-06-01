@@ -83,7 +83,7 @@ def Chebishev_metod(h2,k2,n,m,k_num,A,v,f,eps,N_max,counter_iterations, counter_
 
     norm_r = np.sqrt(norm_r)
     norm_z = np.sqrt(norm_z)
-    #exact = np.array([np.array([u(x[i], y[j]) for j in range(m + 1)]) for i in range(n + 1)])  # u(x, y)
+    exact = np.array([np.array([u(x[i], y[j]) for j in range(m + 1)]) for i in range(n + 1)])  # u(x, y)
    # file.write('Metod Chebisheva\n')
     #for i in range(n+1):
     #    file.write('V')
@@ -95,7 +95,7 @@ def Chebishev_metod(h2,k2,n,m,k_num,A,v,f,eps,N_max,counter_iterations, counter_
           #      file.write(' '*help)
            # file.write(' ')
         #file.write('\n')
-    return(v, counter_iterations, eps_max, norm_r, norm_z)
+    return(v,exact, counter_iterations, eps_max, norm_r, norm_z)
 
 #Метод простых итераций
 def Simple_metod(h2,k2,n,m,k_num,A,v,f,eps,N_max,counter_iterations, x,y):
@@ -137,7 +137,7 @@ def Simple_metod(h2,k2,n,m,k_num,A,v,f,eps,N_max,counter_iterations, x,y):
 
     norm_r = np.sqrt(norm_r)
     norm_z = np.sqrt(norm_z)
-   # exact = np.array([np.array([u(x[i], y[j]) for j in range(m + 1)]) for i in range(n + 1)])  # u(x, y)
+    exact = np.array([np.array([u(x[i], y[j]) for j in range(m + 1)]) for i in range(n + 1)])  # u(x, y)
     #file.write('Metod Simple iteration\n')
     #for i in range(n+1):
      #   file.write('V')
@@ -149,7 +149,7 @@ def Simple_metod(h2,k2,n,m,k_num,A,v,f,eps,N_max,counter_iterations, x,y):
            #     file.write(' '*help)
             #file.write(' ')
         #file.write('\n')
-    return(v,counter_iterations, eps_max, norm_r, norm_z)
+    return(v,exact,counter_iterations, eps_max, norm_r, norm_z)
 
 
 def start_all_metod(n, m, N_max, eps, a, b, c, d, Var, F,mu1,mu2,mu3,mu4, k_num):
@@ -183,16 +183,16 @@ def start_all_metod(n, m, N_max, eps, a, b, c, d, Var, F,mu1,mu2,mu3,mu4, k_num)
         v[1:n, j] = mu_1[j] + (mu_2[j] - mu_1[j]) / (b - a) * (x[1:n] - a)
     #print(v)
     if Var==1:
-        v_method,counter_iterations, eps_max, norm_r, norm_z=Chebishev_metod(h2,k2,n,m,k_num,A,v,f,eps,N_max,counter_iterations, counter_steps,x,y)
+        v_method,exact,counter_iterations, eps_max, norm_r, norm_z=Chebishev_metod(h2,k2,n,m,k_num,A,v,f,eps,N_max,counter_iterations, counter_steps,x,y)
     elif Var==2:
-        v_method,counter_iterations, eps_max, norm_r, norm_z=Simple_metod(h2,k2,n,m,k_num,A,v,f,eps,N_max, counter_iterations,x,y)
+        v_method,exact,counter_iterations, eps_max, norm_r, norm_z=Simple_metod(h2,k2,n,m,k_num,A,v,f,eps,N_max, counter_iterations,x,y)
     #print('V Чебышева =',v_Cheb)
     v=[[0 for i in range (n+1)] for j in range(m+1)]
     for i in range(m+1):
         for j in range(n+1):
             v[i][j]=round(v_method[j][i],5)
     #print('v = ', v)
-    return v,x,y,counter_iterations, eps_max, norm_r, norm_z
+    return v,x,y,counter_iterations, eps_max, norm_r, norm_z,exact
     #print('V простых итераций =', v_simple)
 #start_all_metod(3,5,1000,10**(-6),1,2,2,3)
 

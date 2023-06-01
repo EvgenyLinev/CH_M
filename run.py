@@ -20,11 +20,11 @@ def table(tab,f,mu1,mu2,mu3,mu4):
     #c.place(x='15',y='20')
     #c.create_rectangle(0, 0, 360, 500)
     if tab==tab1:
-        u,x_3d,y_3d,counter_iterations, eps_max, norm_r, norm_z=start_all_metod(int(txt_n.get()),int(txt_m.get()),int(txt_N_max.get()),float(txt_eps.get()),
+        u,x_3d,y_3d,counter_iterations, eps_max, norm_r, norm_z,u_help=start_all_metod(int(txt_n.get()),int(txt_m.get()),int(txt_N_max.get()),float(txt_eps.get()),
                         float(txt_a.get()),float(txt_b.get()),float(txt_c.get()),float(txt_d.get()), 
                         Var.get(),f,mu1,mu2,mu3,mu4, int(txt_k.get()))
     if tab==tab2:
-        u,x_3d,y_3d,counter_iterations, eps_max, norm_r, norm_z=start_all_metod(int(txt_n_2.get()),int(txt_m_2.get()),int(txt_N_max_2.get()),float(txt_eps_2.get()),
+        u_help,x_3d,y_3d,counter_iterations, eps_max, norm_r, norm_z,u=start_all_metod(int(txt_n_2.get()),int(txt_m_2.get()),int(txt_N_max_2.get()),float(txt_eps_2.get()),
                         float(txt_a_2.get()),float(txt_b_2.get()),float(txt_c_2.get()),float(txt_d_2.get()), 
                         Var.get(),f,mu1,mu2,mu3,mu4, int(txt_k_2.get()))
     table_u=[[i] for i in range (len(u))]
